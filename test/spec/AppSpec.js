@@ -12,6 +12,21 @@ describe('App', function() {
         artist: 'data',
         url: '/test/testsong2.mp3',
         title: 'test song 2'
+      },
+      {
+        artist: 'data',
+        url: '/test/testsong3.mp3',
+        title: 'test song 3'
+      },
+      {
+        artist: 'data',
+        url: '/test/testsong4.mp3',
+        title: 'test song 4'
+      },
+      {
+        artist: 'data',
+        url: '/test/testsong5.mp3',
+        title: 'test song 5'
       }
     ]);
     app = new AppModel({library: fakeSongs});
@@ -27,9 +42,22 @@ describe('App', function() {
     expect(app.get('currentSong')).to.equal(app.get('library').at(0));
   });
 
-  xit('queues the next song when an "enqueue" event is fired', function() {
+  it('queues the next song when an "enqueue" event is fired', function() {
     app.get('library').at(1).enqueue();
     expect(app.get('songQueue').at(0)).to.equal(app.get('library').at(1));
+  });
+
+  it('dequeues the song when a "dequeue" event is fired', function() {
+    app.get('library').at(0).enqueue();
+    app.get('library').at(1).enqueue();
+    app.get('library').at(2).enqueue();
+    app.get('library').at(3).enqueue();
+
+    expect(app.get('songQueue').at(0)).to.equal(app.get('library').at(0));
+    app.get('songQueue').at(0).dequeue();
+    expect(app.get('songQueue').at(0)).to.equal(app.get('library').at(1));
+    app.get('songQueue').at(1).dequeue();    
+    expect(app.get('songQueue').at(1)).to.equal(app.get('library').at(3));
   });
 
 });
