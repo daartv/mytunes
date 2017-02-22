@@ -5,13 +5,14 @@ var Songs = Backbone.Collection.extend({
 
 
   initialize: function() {
-    var context = this;
     $.ajax({
       url: 'http://parse.sfm6.hackreactor.com/mytunes/classes/songs',
       type: 'GET',
       contentType: 'application/json',
       success: function(data) {
+        console.log('Data retrieved successfully.');
         this.add(data.results);
+        this.trigger('update');
       }.bind(this),
       error: function() {
         console.error('Error in retrieving data.');
